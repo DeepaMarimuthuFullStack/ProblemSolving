@@ -1,0 +1,48 @@
+public class Solution {
+    boolean checkBit(int N, int i) {
+        if(((N>>i) &1) == 1) {
+            return true;
+        }
+        return false;
+    }
+    public int[] solve(int[] A) {
+        //Step 1 : XOR of all the elements
+        int xorValue = 0;
+        for(int val : A) {
+            xorValue ^= val;
+        }
+
+        //Step 2 : find Bit Position
+        int position = -1;
+        for(int i = 0 ; i < 32 ; i++) {
+            if(checkBit(xorValue, i)) {
+                position = i;
+                break;
+            }
+        }
+
+         if(position == -1)
+          return new int[2];
+
+        //Step 3 : Split based on position
+       
+        int ans1 = 0;
+        int ans2 = 0;
+        //32 because its int
+        for(int i = 0 ; i < A.length ; i++) {
+            if(checkBit(A[i], position)) {
+                ans1 ^= A[i];
+            } else{
+                ans2 ^= A[i];
+            }
+        }
+
+        //Step 4 : Xor of 2 groups
+        int min = Math.min(ans1, ans2);
+        int max = Math.max(ans1, ans2);
+
+        //Return in Ascending order
+        return (min < max) ? new int[]{min, max} : new int[]{max, min};
+    }
+
+}
